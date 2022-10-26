@@ -8,9 +8,21 @@ import os.path
 def process_txt(vec):
     # Debemos abrir el archivo
     m = open("generos.txt", mode='rt', encoding="utf8")
-    for linea in m:
-        if linea.strip():
-            vec.append(linea)
+    t = os.path.getsize("generos.txt")
+    # Recorremos el archivo
+    while m.tell() < t:
+        #Almacenamos la linea que estamos procesando, y luego mediante la funcion strip, eliminamos el caracter de diagonal invertida
+        line = m.readline().strip('\n')
+        vec.append(line)
+    # Cerrar el archivo
+    m.close()
+
+
+#2) Procesar el archivo de texto series.csv para generar un vector de registros de series con el siguiente formato:
+
+def cargar_registros(vec_regs):
+    #Primero abrimos el archivo de series_aed
+    m = open("series_aed.csv", mode='rt', encoding='utf8')
 
 
 def main():
