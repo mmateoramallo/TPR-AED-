@@ -9,7 +9,7 @@ def process_txt(vec):
     # Debemos abrir el archivo
     m = open("generos.txt", mode='rt', encoding="utf8")
     for linea in m:
-        if not (linea == '\n'):
+        if linea.strip():
             vec.append(linea)
 
 
