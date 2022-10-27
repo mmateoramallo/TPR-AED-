@@ -12,8 +12,11 @@ def process_txt(vec):
     # Recorremos el archivo
     while m.tell() < t:
         #Almacenamos la linea que estamos procesando, y luego mediante la funcion strip, eliminamos el caracter de diagonal invertida
-        line = m.readline().strip('\n')
-        vec.append(line)
+        #line = m.readline().strip('\n')
+        #Leemos la linea y luego le eliminamos el caracter backslash n para poder almacenar el genero en el vector
+        linea = m.readline()
+        linea = linea[:-1]
+        vec.append(linea)
     # Cerrar el archivo
     m.close()
 
@@ -30,7 +33,7 @@ def cargar_registros(vec_regs):
         if c > 0:
             #En este punto ya estamos procesando las lineas del archivo, almacenamos la linea como un array, separando las palabras
             txt_line = linea.split('|')
-            print(txt_line)
+            #print(txt_line)
 
 
         c += 1
