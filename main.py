@@ -47,7 +47,7 @@ def tokenizar(linea, vector_generos):
     runtime_of_series = token[2]
     certificate = token[3]
     runtime_of_episodes = token[4]
-    runtime_of_episodes = int(runtime_of_episodes[:2])
+    runtime_of_episodes = runtime_of_episodes[:2]
     # runtime_of_episodes = int(runtime_of_episodes)
     genre = token[5]
     for i in range(len(vector_generos)):
@@ -110,6 +110,58 @@ def mostrar_vector_registros(vector_registros):
         print(serie)
 
 # PUNTO 3 ------------------------------------------------------------------------------------------------
+def to_string(registro):
+    cadena = ''
+    cadena += registro.poster_link
+    cadena += '|'
+    cadena += registro.series_title
+    cadena += '|'
+    cadena += registro.runtime_of_series
+    cadena += '|'
+    cadena += registro.certificate
+    cadena += '|'
+    cadena += registro.runtime_of_episodes
+    cadena += '|'
+    cadena += registro.genre
+    cadena += '|'
+    cadena += registro.IMDB_rating
+    cadena += '|'
+    cadena += registro.Overwiew
+    cadena += '|'
+    cadena += registro.No_of_Vote
+    return cadena
+
+
+def mostrar_y_generar_vector_punto_3(vector_registros, vector_punto_3, a, b):
+    contador_serie = 0
+    acumulador_serie = 0
+    for serie in vector_registros:
+        if serie.runtime_of_episodes >= a or serie.runtime_of_episodes <= b:
+            print(serie)
+            contador_serie += 1
+            acumulador_serie += serie.runtime_of_episodes
+            vector_punto_3.append(serie)
+    promedio = acumulador_serie / contador_serie
+    print(f'La duración promedio de las series que usted eligió es de: {promedio}.')
+    return vector_punto_3
+
+
+def crear_archivo_con_omitidos(archivo3, vector_punto_3):
+        if len(vector_punto_3) == 0:
+            print('El vector de registros cargado está vacío, primero seleccione la opción 1.')
+            return
+
+        header = 'Poster_Link' + '|' + 'Series_Title' + '|' + 'Runtime_of_Series' + '|' + 'Certificate' + \
+            '|' + 'Runtime_of_Episodes' + '|' + 'Genre' + '|' + 'IMDB_Rating' + '|' + 'Overview' + \
+            '|' +  'No_of_Votes'
+
+        m = open(archivo3, "wt")
+
+        m.write(header)
+        for serie in vector_punto_3:
+                linea = to_string(serie)
+                m.write(linea)
+        m.close()
 
 
 # PUNTO 4 ------------------------------------------------------------------------------------------------
@@ -126,14 +178,14 @@ def mostrar_vector_registros(vector_registros):
 
 # FUNCIÓN PRINCIPAL -----------------------------------------------------------------------------------------
 
-
-
 def main():
     menu()
     archivo1 = 'generos.txt'
     archivo2 = 'series_aed.csv'
+    archivo3 = 'series2.aed.csv'
     vector_registros = []
     vector_generos = []
+    vector_punto_3 = []
     opc = -1
     bandera_1 = False
     while opc != 0:
@@ -149,11 +201,19 @@ def main():
                 cargar_vector_registros(archivo2, vector_registros, vector_generos)
                 mostrar_vector_registros(vector_registros)
                 print('Se ha cargado exitosamente su vector de registros.')
+            elif opc == 3:
+                a = validar_rango('Ingrese una duración mínima de su serie: ', 0, 10000)
+                b = validar_rango('Ingrese una duración máxima de su serie: ', 0, 10000)
+                vector_punto_3 = mostrar_y_generar_vector_punto_3(vector_registros, vector_punto_3, a, b)
+                decision = input('¿Desea generar un archivo con los registros mostrados en el punto 3?: S/N')
+                if decision == 's' or 'S':
+                    crear_archivo_con_omitidos(archivo3, vector_punto_3)
+                else:
+                    print('Ud. eligió no crear el archivo del punto 3. Siga usando el programa si desea.')
         elif not bandera_1 and opc in (2, 3, 4, 5, 6, 7):
             print('Error. Primero cargue el vector de géneros antes de utilizar otras opciones.')
     else:
         print('¡Gracias por usar nuestro programa!')
-
 
 
 if __name__ == '__main__':
