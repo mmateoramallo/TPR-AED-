@@ -2,6 +2,7 @@ from Series import *
 import random
 import os.path
 import pickle
+from Generos_Series import *
 
 
 # FUNCIONES AUXILIARES ----------------------------------------------------------------------------------
@@ -115,7 +116,10 @@ def cargar_vector_registros(archivo2, vector_registros, vector_generos):
             #     contador_falso += 1
 
             c += 1
+
+    print()
     print(f'Se omitieron: {contador_falso} series.')
+    print()
     print(f'Se ha cargado exitosamente su vector de registros, con {contador_verdadero} series.')
 
 
@@ -195,11 +199,49 @@ def show_cont(vec_cont, vector_generos):
 
 
 # PUNTO 5 ------------------------------------------------------------------------------------------------
+def generate_file():
+    file_name = input('Ingrese el nombre del archivo que desee crear: ')
+    # Comprobamos que el archivo no exista
+    if not (os.path.exists(file_name)):
+        # Creamos el archivo
+        m = open(file_name, 'wb')
+
+    return m
+
+
+def generate_vec(vec_cont, vec_generos):
+    # Genramos el archivo
+    m = generate_file()
+    # Recorremos el vector de conteo para instanciar luego la clase Generos_Series para poder obtener del vector los valores
+    for i in range(len(vec_cont)):
+        # Cargamos los datos del registro
+        id_gen = i
+        nombre_gen = vec_generos[i]
+        cant = vec_cont[i]
+        # Intanciamos la clase
+        gen_serie = Gen_ser(id_gen, nombre_gen, cant)
+        # Hacemos dump de los datos del registro al archivo binario
+        pickle.dump(gen_serie, m)
+    # Cerramos el archivo
+    m.close()
 
 
 # PUNTO 6 ------------------------------------------------------------------------------------------------
+#6) Mostrar el archivo generado en el punto 5.
 
+def show_file():
+    file_name = input('Ingrese el nombre del archivo binario a leer: ')
+    #Abrimos el archivo
+    m = open(file_name, 'rb')
+    t = os.path.getsize(file_name)
+    #Recorremos el archivo
+    while m.tell() < t:
+        #Hacemos un load de la informacion cargada en el archivo
+        gen_ser = pickle.load(m)
+        print(gen_ser)
 
+    #Cerramos el archivo
+    m.close()
 # PUNTO 7 ------------------------------------------------------------------------------------------------
 
 
@@ -207,15 +249,28 @@ def show_cont(vec_cont, vector_generos):
 
 
 def main():
+    print()
+    print()
+
     menu()
+
+    print()
+    print()
+
     archivo1 = 'generos.txt'
     archivo2 = 'series_aed.csv'
     archivo3 = 'series2.aed.csv'
+
     vector_registros = []
     vector_generos = []
     vector_punto_3 = []
+
+
     opc = -1
     bandera_1 = False
+    #Verificar si se cargo el vector de conteo
+    hay_conts = False
+
     while opc != 0:
         opc = validar_rango('Ingrese una opción válida por favor: ', 0, 7)
         if opc == 1 and not bandera_1:
@@ -249,6 +304,18 @@ def main():
                 # Llamamos a la funcion para mostrar el contador
                 show_cont(vec_cont, vector_generos)
                 print(vec_cont)
+                print()
+                hay_conts = True
+            elif opc == 5:
+                if hay_conts:
+                    print()
+                    generate_vec(vec_cont, vector_generos)
+                    print()
+                else:
+                    print('Cargue Primero el vector de conteo mediante la opcion 4')
+            elif opc == 6:
+                print()
+                show_file()
                 print()
         elif not bandera_1 and opc in (2, 3, 4, 5, 6, 7):
             print('Error. Primero cargue el vector de géneros antes de utilizar otras opciones.')
