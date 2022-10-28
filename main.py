@@ -63,6 +63,7 @@ def tokenizar(linea, vector_generos):
     No_of_Vote = token[12]
 
     if runtime_of_episodes != "":
+        runtime_of_episodes = int(runtime_of_episodes)
         serie = Serie(poster_link, series_title, runtime_of_series, certificate,
                       runtime_of_episodes, genre, IMDB_rating, Overwiew, No_of_Vote)
     else:
@@ -107,10 +108,12 @@ def cargar_vector_registros(archivo2, vector_registros, vector_generos):
             if serie:
                 insercion_binaria_por_numero_de_votos(vector_registros, serie)
                 contador_verdadero += 1
+            else:
+                contador_falso += 1
             # if serie:
             #     contador_falso += 1
-    # print(f'Se omitieron: {contador_falso} series.')
-    # print(f'Se ha cargado exitosamente su vector de registros, con {contador_verdadero} series.')
+    print(f'Se omitieron: {contador_falso} series.')
+    print(f'Se ha cargado exitosamente su vector de registros, con {contador_verdadero} series.')
 
 
 def mostrar_vector_registros(vector_registros):
