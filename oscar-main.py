@@ -139,9 +139,9 @@ def to_string(registro):
     cadena += '|'
     cadena += registro.certificate
     cadena += '|'
-    cadena += registro.runtime_of_episodes
+    cadena += str(registro.runtime_of_episodes)
     cadena += '|'
-    cadena += registro.genre
+    cadena += str(registro.genre)
     cadena += '|'
     cadena += registro.IMDB_rating
     cadena += '|'
@@ -199,19 +199,9 @@ def show_cont(vec_cont, vector_generos):
 
 
 # PUNTO 5 ------------------------------------------------------------------------------------------------
-def generate_file():
-    file_name = input('Ingrese el nombre del archivo que desee crear: ')
-    # Comprobamos que el archivo no exista
-    if not (os.path.exists(file_name)):
-        # Creamos el archivo
-        m = open(file_name, 'wb')
-
-    return m
-
-
-def generate_vec(vec_cont, vec_generos):
+def generate_vec(vec_cont, vec_generos, file_name):
     # Genramos el archivo
-    m = generate_file()
+    m = open(file_name, 'wb')
     # Recorremos el vector de conteo para instanciar luego la clase Generos_Series para poder obtener del vector los valores
     for i in range(len(vec_cont)):
         # Cargamos los datos del registro
@@ -227,21 +217,22 @@ def generate_vec(vec_cont, vec_generos):
 
 
 # PUNTO 6 ------------------------------------------------------------------------------------------------
-#6) Mostrar el archivo generado en el punto 5.
+# 6) Mostrar el archivo generado en el punto 5.
 
-def show_file():
-    file_name = input('Ingrese el nombre del archivo binario a leer: ')
-    #Abrimos el archivo
+def show_file(file_name):
+    # Abrimos el archivo
     m = open(file_name, 'rb')
     t = os.path.getsize(file_name)
-    #Recorremos el archivo
+    # Recorremos el archivo
     while m.tell() < t:
-        #Hacemos un load de la informacion cargada en el archivo
+        # Hacemos un load de la informacion cargada en el archivo
         gen_ser = pickle.load(m)
         print(gen_ser)
 
-    #Cerramos el archivo
+    # Cerramos el archivo
     m.close()
+
+
 # PUNTO 7 ------------------------------------------------------------------------------------------------
 
 
@@ -261,15 +252,17 @@ def main():
     archivo2 = 'series_aed.csv'
     archivo3 = 'series2.aed.csv'
 
+    filen_name = 'series.dat'
+
     vector_registros = []
     vector_generos = []
     vector_punto_3 = []
 
-
     opc = -1
     bandera_1 = False
-    #Verificar si se cargo el vector de conteo
+    # Verificar si se cargo el vector de conteo
     hay_conts = False
+    gen_file = False
 
     while opc != 0:
         opc = validar_rango('Ingrese una opción válida por favor: ', 0, 7)
@@ -296,27 +289,36 @@ def main():
                 else:
                     print('Ud. eligió no crear el archivo del punto 3. Siga usando el programa si desea.')
             elif opc == 4:
-                print()
-                # 4) Generar un vector de conteo en el que se pueda determinar la cantidad de series por cada uno de los géneros posibles, haciendo uso del vector de registros de series y del vector de géneros del punto 1. Mostrar los resultados visualizando el nombre del género en lugar del código representado.
-                vec_cont = [0] * 23
-                # LLamamos a la funcion para contar series por genero
-                cont_ser_por_gen(vector_registros, vec_cont)
-                # Llamamos a la funcion para mostrar el contador
-                show_cont(vec_cont, vector_generos)
-                print(vec_cont)
-                print()
-                hay_conts = True
+                if vector_registros:
+                    print()
+                    # 4) Generar un vector de conteo en el que se pueda determinar la cantidad de series por cada uno de los géneros posibles, haciendo uso del vector de registros de series y del vector de géneros del punto 1. Mostrar los resultados visualizando el nombre del género en lugar del código representado.
+                    vec_cont = [0] * 23
+                    # LLamamos a la funcion para contar series por genero
+                    cont_ser_por_gen(vector_registros, vec_cont)
+                    # Llamamos a la funcion para mostrar el contador
+                    show_cont(vec_cont, vector_generos)
+                    print(vec_cont)
+                    print()
+                    hay_conts = True
+                    print()
+                else:
+                    print('Cargue primero el vector de registros')
             elif opc == 5:
                 if hay_conts:
                     print()
-                    generate_vec(vec_cont, vector_generos)
+                    generate_vec(vec_cont, vector_generos, filen_name)
+                    print('*' * 21, 'Archivo Generado Correctamente', '*' * 21)
                     print()
+                    gen_file = True
                 else:
                     print('Cargue Primero el vector de conteo mediante la opcion 4')
             elif opc == 6:
-                print()
-                show_file()
-                print()
+                if gen_file:
+                    print()
+                    show_file(filen_name)
+                    print()
+                else:
+                    print('Cargue primero el Archivo Binario mediante la opcion 5')
         elif not bandera_1 and opc in (2, 3, 4, 5, 6, 7):
             print('Error. Primero cargue el vector de géneros antes de utilizar otras opciones.')
     else:
