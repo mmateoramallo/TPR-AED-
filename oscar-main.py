@@ -62,7 +62,6 @@ def tokenizar(linea, vector_generos):
     IMDB_rating = token[6]
     Overwiew = token[7]
     No_of_Vote = token[12]
-
     if runtime_of_episodes != "":
         runtime_of_episodes = int(runtime_of_episodes)
         serie = Serie(poster_link, series_title, runtime_of_series, certificate,
@@ -235,6 +234,27 @@ def show_file(file_name):
 
 # PUNTO 7 ------------------------------------------------------------------------------------------------
 
+# 7) Buscar si en el vector de series se encuentra una serie con el campo Series_Title igual a tit, siendo tit un valor que se carga por teclado. Si se encuentra incrementar su número de votos en uno. Si no se encuentra mostrar un mensaje.
+def search_tit(vec_registros):
+    tit = input('Ingrese el titulo de la serie que usted desea buscar: ')
+    se_encontro = False
+    for i in vec_registros:
+        if i.series_title == tit:
+            # Declaramos que el numero de votos sea un int
+            i.No_of_Vote = int(i.No_of_Vote)
+            # Incrementamos su numero de votos en uno
+            i.No_of_Vote += 1
+            print('*' * 21, 'El registro modificado fue', '*' * 21)
+            #Lo volvemos un string
+            i.No_of_Vote = str(i.No_of_Vote)
+            print(i)
+            se_encontro = True
+            # Cortamos el ciclo para que deje de buscar
+            break
+
+    if not se_encontro:
+        print('*' * 21, 'No se encontro la serie', tit, '*' * 21)
+
 
 # FUNCIÓN PRINCIPAL -----------------------------------------------------------------------------------------
 
@@ -319,6 +339,13 @@ def main():
                     print()
                 else:
                     print('Cargue primero el Archivo Binario mediante la opcion 5')
+            elif opc == 7:
+                # Verifico que el vector de registros este cargado:
+                if vector_registros:
+                    search_tit(vector_registros)
+                else:
+                    print('*' * 21, 'Primero Carge el vector de registros si no quiere que explote!!', '*' * 21)
+
         elif not bandera_1 and opc in (2, 3, 4, 5, 6, 7):
             print('Error. Primero cargue el vector de géneros antes de utilizar otras opciones.')
     else:
