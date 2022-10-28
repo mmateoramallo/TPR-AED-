@@ -182,15 +182,16 @@ def crear_archivo_con_omitidos(archivo3, vector_punto_3):
 # PUNTO 4 ------------------------------------------------------------------------------------------------
 
 def cont_ser_por_gen(vector_registros, vec_cont):
-    #Recorremos el vector de registros, y el de series
+    # Recorremos el vector de registros, y el de series
     for i in range(len(vector_registros)):
-        #Contamos uno mas en el casillero correspondiente al codigo del genero en el vector de registros
+        # Contamos uno mas en el casillero correspondiente al codigo del genero en el vector de registros
         vec_cont[vector_registros[i].genre] += 1
 
+
 def show_cont(vec_cont, vector_generos):
-    #Recorro el vector de conteo
+    # Recorro el vector de conteo
     for i in range(len(vec_cont)):
-        print('El genero:', vector_generos[vec_cont[i]], 'tiene una cantidad de:', vec_cont[i], 'series')
+        print('-' * 15, '>Hay', vec_cont[i], 'series del genero:', vector_generos[i])
 
 
 # PUNTO 5 ------------------------------------------------------------------------------------------------
@@ -203,8 +204,6 @@ def show_cont(vec_cont, vector_generos):
 
 
 # FUNCIÓN PRINCIPAL -----------------------------------------------------------------------------------------
-
-
 
 
 def main():
@@ -243,12 +242,12 @@ def main():
                     print('Ud. eligió no crear el archivo del punto 3. Siga usando el programa si desea.')
             elif opc == 4:
                 print()
-                #4) Generar un vector de conteo en el que se pueda determinar la cantidad de series por cada uno de los géneros posibles, haciendo uso del vector de registros de series y del vector de géneros del punto 1. Mostrar los resultados visualizando el nombre del género en lugar del código representado.
+                # 4) Generar un vector de conteo en el que se pueda determinar la cantidad de series por cada uno de los géneros posibles, haciendo uso del vector de registros de series y del vector de géneros del punto 1. Mostrar los resultados visualizando el nombre del género en lugar del código representado.
                 vec_cont = [0] * 23
-                #LLamamos a la funcion para contar series por genero
+                # LLamamos a la funcion para contar series por genero
                 cont_ser_por_gen(vector_registros, vec_cont)
-                #Llamamos a la funcion para mostrar el contador
-                show_cont(vec_cont,vector_generos)
+                # Llamamos a la funcion para mostrar el contador
+                show_cont(vec_cont, vector_generos)
                 print(vec_cont)
                 print()
         elif not bandera_1 and opc in (2, 3, 4, 5, 6, 7):
