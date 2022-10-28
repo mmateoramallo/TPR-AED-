@@ -41,13 +41,18 @@ def generar_vector_generos(vector_registros, archivo1):
 
 # PUNTO 2 ------------------------------------------------------------------------------------------------
 def tokenizar(linea, vector_generos):
+    indice = 0
     token = linea.split('|')
     poster_link = token[0]
     series_title = token[1]
     runtime_of_series = token[2]
     certificate = token[3]
     runtime_of_episodes = token[4]
-    runtime_of_episodes = runtime_of_episodes[:2]
+    for i in range(len(runtime_of_episodes)):
+        if runtime_of_episodes[i] == ' ':
+            indice = i
+
+    runtime_of_episodes = runtime_of_episodes[:indice]
     # runtime_of_episodes = int(runtime_of_episodes)
     genre = token[5]
     for i in range(len(vector_generos)):
@@ -57,15 +62,18 @@ def tokenizar(linea, vector_generos):
     Overwiew = token[7]
     No_of_Vote = token[12]
 
-    serie = Serie(poster_link, series_title, runtime_of_series, certificate,
-                  runtime_of_episodes, genre, IMDB_rating, Overwiew, No_of_Vote)
+    if runtime_of_episodes != "":
+        serie = Serie(poster_link, series_title, runtime_of_series, certificate,
+                      runtime_of_episodes, genre, IMDB_rating, Overwiew, No_of_Vote)
+    else:
+        serie = None
 
     return serie
 
 
 def insercion_binaria_por_numero_de_votos(vector_registros, registro):
     n = len(vector_registros)
-    izq, der = 0, n-1
+    izq, der = 0, n - 1
     pos = n
 
     while izq <= der:
@@ -86,7 +94,7 @@ def cargar_vector_registros(archivo2, vector_registros, vector_generos):
         print('El archivo', archivo2, 'no existe. Serciórese de que exista primero.')
         return
 
-    m = open(archivo2, "rt")
+    m = open(archivo2, mode="rt", encoding="windows-1252")
     tam = os.path.getsize(archivo2)
 
     while m.tell() < tam:
@@ -96,11 +104,11 @@ def cargar_vector_registros(archivo2, vector_registros, vector_generos):
         contador_verdadero = 0
         for linea in lista:
             serie = tokenizar(linea[:-1], vector_generos)
-            if not serie.runtime_of_episodes == '':
+            if serie:
                 insercion_binaria_por_numero_de_votos(vector_registros, serie)
                 contador_verdadero += 1
-            if serie.runtime_of_episodes == '':
-                contador_falso += 1
+            # if serie:
+            #     contador_falso += 1
     # print(f'Se omitieron: {contador_falso} series.')
     # print(f'Se ha cargado exitosamente su vector de registros, con {contador_verdadero} series.')
 
@@ -108,6 +116,7 @@ def cargar_vector_registros(archivo2, vector_registros, vector_generos):
 def mostrar_vector_registros(vector_registros):
     for serie in vector_registros:
         print(serie)
+
 
 # PUNTO 3 ------------------------------------------------------------------------------------------------
 def to_string(registro):
@@ -147,21 +156,21 @@ def mostrar_y_generar_vector_punto_3(vector_registros, vector_punto_3, a, b):
 
 
 def crear_archivo_con_omitidos(archivo3, vector_punto_3):
-        if len(vector_punto_3) == 0:
-            print('El vector de registros cargado está vacío, primero seleccione la opción 1.')
-            return
+    if len(vector_punto_3) == 0:
+        print('El vector de registros cargado está vacío, primero seleccione la opción 1.')
+        return
 
-        header = 'Poster_Link' + '|' + 'Series_Title' + '|' + 'Runtime_of_Series' + '|' + 'Certificate' + \
-            '|' + 'Runtime_of_Episodes' + '|' + 'Genre' + '|' + 'IMDB_Rating' + '|' + 'Overview' + \
-            '|' +  'No_of_Votes'
+    header = 'Poster_Link' + '|' + 'Series_Title' + '|' + 'Runtime_of_Series' + '|' + 'Certificate' + \
+             '|' + 'Runtime_of_Episodes' + '|' + 'Genre' + '|' + 'IMDB_Rating' + '|' + 'Overview' + \
+             '|' + 'No_of_Votes'
 
-        m = open(archivo3, "wt")
+    m = open(archivo3, "wt")
 
-        m.write(header)
-        for serie in vector_punto_3:
-                linea = to_string(serie)
-                m.write(linea)
-        m.close()
+    m.write(header)
+    for serie in vector_punto_3:
+        linea = to_string(serie)
+        m.write(linea)
+    m.close()
 
 
 # PUNTO 4 ------------------------------------------------------------------------------------------------
@@ -192,14 +201,13 @@ def main():
         opc = validar_rango('Ingrese una opción válida por favor: ', 0, 7)
         if opc == 1 and not bandera_1:
             generar_vector_generos(vector_generos, archivo1)
-            print(vector_generos)
             bandera_1 = True
         elif opc == 1 and bandera_1:
             print('Error. Sólo puede generar el vector de géneros una única vez cuando ejecuta el programa.')
         elif opc != 1 and bandera_1:
             if opc == 2:
                 cargar_vector_registros(archivo2, vector_registros, vector_generos)
-                mostrar_vector_registros(vector_registros)
+                # mostrar_vector_registros(vector_registros)
                 print('Se ha cargado exitosamente su vector de registros.')
             elif opc == 3:
                 a = validar_rango('Ingrese una duración mínima de su serie: ', 0, 10000)
