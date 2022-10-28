@@ -11,9 +11,9 @@ def process_txt(vec):
     t = os.path.getsize("generos.txt")
     # Recorremos el archivo
     while m.tell() < t:
-        #Almacenamos la linea que estamos procesando, y luego mediante la funcion strip, eliminamos el caracter de diagonal invertida
-        #line = m.readline().strip('\n')
-        #Leemos la linea y luego le eliminamos el caracter backslash n para poder almacenar el genero en el vector
+        # Almacenamos la linea que estamos procesando, y luego mediante la funcion strip, eliminamos el caracter de diagonal invertida
+        # line = m.readline().strip('\n')
+        # Leemos la linea y luego le eliminamos el caracter backslash n para poder almacenar el genero en el vector
         linea = m.readline()
         linea = linea[:-1]
         vec.append(linea)
@@ -21,29 +21,27 @@ def process_txt(vec):
     m.close()
 
 
-#2) Procesar el archivo de texto series.csv para generar un vector de registros de series con el siguiente formato:
+# 2) Procesar el archivo de texto series.csv para generar un vector de registros de series con el siguiente formato:
 
 def cargar_registros(vec_regs):
-    #Primero abrimos el archivo de series_aed
+    # Primero abrimos el archivo de series_aed
     m = open("series_aed.csv", mode='rt')
-    #Establecemos un contadar, para validar que no se procese el encabezado
+    # Establecemos un contadar, para validar que no se procese el encabezado
     c = 0
-    #Recorremos el archivo
+    # Recorremos el archivo
     for linea in m:
         if c > 0:
-            #En este punto ya estamos procesando las lineas del archivo, almacenamos la linea como un array, separando las palabras
+            # En este punto ya estamos procesando las lineas del archivo, almacenamos la linea como un array, separando las palabras
             txt_line = linea.split('|')
-            #print(txt_line)
-
+            # print(txt_line)
 
         c += 1
-
 
 
 def main():
     # Generamos el vector con los generos de las series
     vec_gen = []
-    #Generamos el vector de registros
+    # Generamos el vector de registros
     vec_regs = []
 
 

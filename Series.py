@@ -7,8 +7,8 @@ class Serie:
         self.certificate = certificate
         self.runtime_of_episodes = runtime_of_episodes
         self.genre = genre
-        self.IMDB_rating  =IMDB_rating
+        self.IMDB_rating =IMDB_rating
         self.Overwiew = Overwiew
         self.Stars = Stars
-        self.No_of_Vote
+        self.No_of_Vote = No_of_Vote
 
