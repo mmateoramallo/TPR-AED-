@@ -59,13 +59,13 @@ def tokenizar(linea, vector_generos):
     for i in range(len(vector_generos)):
         if genre == vector_generos[i]:
             genre = i
-    IMDB_rating = token[6]
-    Overwiew = token[7]
-    No_of_Vote = token[12]
+    iMDB_rating = token[6]
+    overwiew = token[7]
+    no_of_Vote = token[12]
     if runtime_of_episodes != "":
         runtime_of_episodes = int(runtime_of_episodes)
         serie = Serie(poster_link, series_title, runtime_of_series, certificate,
-                      runtime_of_episodes, genre, IMDB_rating, Overwiew, No_of_Vote)
+                      runtime_of_episodes, genre, iMDB_rating, overwiew, no_of_Vote)
     else:
         serie = None
 
@@ -79,10 +79,10 @@ def insercion_binaria_por_numero_de_votos(vector_registros, registro):
 
     while izq <= der:
         c = (izq + der) // 2
-        if registro.No_of_Vote == vector_registros[c].No_of_Vote:
+        if registro.no_of_Vote == vector_registros[c].no_of_Vote:
             pos = c
             break
-        if registro.No_of_Vote > vector_registros[c].No_of_Vote:
+        if registro.no_of_Vote > vector_registros[c].no_of_Vote:
             der = c - 1
         else:
             izq = c + 1
@@ -142,11 +142,11 @@ def to_string(registro):
     cadena += '|'
     cadena += str(registro.genre)
     cadena += '|'
-    cadena += registro.IMDB_rating
+    cadena += registro.iMDB_rating
     cadena += '|'
-    cadena += registro.Overwiew
+    cadena += registro.overwiew
     cadena += '|'
-    cadena += registro.No_of_Vote
+    cadena += registro.no_of_Vote
     return cadena
 
 
@@ -183,7 +183,6 @@ def crear_archivo_con_omitidos(archivo3, vector_punto_3):
 
 
 # PUNTO 4 ------------------------------------------------------------------------------------------------
-
 def cont_ser_por_gen(vector_registros, vec_cont):
     # Recorremos el vector de registros, y el de series
     for i in range(len(vector_registros)):
@@ -201,7 +200,8 @@ def show_cont(vec_cont, vector_generos):
 def generate_vec(vec_cont, vec_generos, file_name):
     # Genramos el archivo
     m = open(file_name, 'wb')
-    # Recorremos el vector de conteo para instanciar luego la clase Generos_Series para poder obtener del vector los valores
+    # Recorremos el vector de conteo para instanciar luego la clase
+    # Generos_Series para poder obtener del vector los valores
     for i in range(len(vec_cont)):
         # Cargamos los datos del registro
         id_gen = i
@@ -233,20 +233,21 @@ def show_file(file_name):
 
 
 # PUNTO 7 ------------------------------------------------------------------------------------------------
-
-# 7) Buscar si en el vector de series se encuentra una serie con el campo Series_Title igual a tit, siendo tit un valor que se carga por teclado. Si se encuentra incrementar su número de votos en uno. Si no se encuentra mostrar un mensaje.
+# 7) Buscar si en el vector de series se encuentra una serie con el campo
+# Series_Title igual a tit, siendo tit un valor que se carga por teclado.
+# Si se encuentra incrementar su número de votos en uno. Si no se encuentra mostrar un mensaje.
 def search_tit(vec_registros):
     tit = input('Ingrese el titulo de la serie que usted desea buscar: ')
     se_encontro = False
     for i in vec_registros:
         if i.series_title == tit:
             # Declaramos que el numero de votos sea un int
-            i.No_of_Vote = int(i.No_of_Vote)
+            i.no_of_Vote = int(i.no_of_Vote)
             # Incrementamos su numero de votos en uno
-            i.No_of_Vote += 1
+            i.no_of_Vote += 1
             print('*' * 21, 'El registro modificado fue', '*' * 21)
-            #Lo volvemos un string
-            i.No_of_Vote = str(i.No_of_Vote)
+            # Lo volvemos un string
+            i.no_of_Vote = str(i.no_of_Vote)
             print(i)
             se_encontro = True
             # Cortamos el ciclo para que deje de buscar
@@ -262,11 +263,7 @@ def search_tit(vec_registros):
 def main():
     print()
     print()
-
     menu()
-
-    print()
-    print()
 
     archivo1 = 'generos.txt'
     archivo2 = 'series_aed.csv'
@@ -285,7 +282,12 @@ def main():
     gen_file = False
 
     while opc != 0:
+        print()
+        print()
+        menu()
         opc = validar_rango('Ingrese una opción válida por favor: ', 0, 7)
+        print()
+        print()
         if opc == 1 and not bandera_1:
             generar_vector_generos(vector_generos, archivo1)
             bandera_1 = True
@@ -311,7 +313,10 @@ def main():
             elif opc == 4:
                 if vector_registros:
                     print()
-                    # 4) Generar un vector de conteo en el que se pueda determinar la cantidad de series por cada uno de los géneros posibles, haciendo uso del vector de registros de series y del vector de géneros del punto 1. Mostrar los resultados visualizando el nombre del género en lugar del código representado.
+                    # 4) Generar un vector de conteo en el que se pueda determinar la cantidad
+                    # de series por cada uno de los géneros posibles, haciendo uso del vector de
+                    # registros de series y del vector de géneros del punto 1. Mostrar los resultados
+                    # visualizando el nombre del género en lugar del código representado.
                     vec_cont = [0] * 23
                     # LLamamos a la funcion para contar series por genero
                     cont_ser_por_gen(vector_registros, vec_cont)

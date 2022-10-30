@@ -58,13 +58,14 @@ def insercion_binaria_por_numero_de_votos(vector_registros, registro):
 
 def cargar_registros(vec_regs, vec_gen):
     # Primero abrimos el archivo de series_aed
-    m = open("series_aed.csv", mode='rt')
+    m = open("series_aed.csv", mode='rt', encoding='windows-1252')
     # Establecemos un contadar, para validar que no se procese el encabezado
     c = 0
     # Recorremos el archivo
     for linea in m:
-        if c > 0 and c <= 10:
-            # En este punto ya estamos procesando las lineas del archivo, almacenamos la linea como un array, separando las palabras
+        if 0 < c <= 10:
+            # En este punto ya estamos procesando las lineas del archivo, almacenamos la
+            # linea como un array, separando las palabras
             txt_line = linea.split('|')
             # Cargamos los campos, del array txt_line
             Poster_Link = txt_line[0]
@@ -77,25 +78,25 @@ def cargar_registros(vec_regs, vec_gen):
             Overwiew = txt_line[7]
             No_of_Vote = txt_line[12]
             indice = 0
-            #Verifico que tenga duracion
+            # Verifico que tenga duracion
             if Runtime_of_Episodes != '':
-                #Eliminamos el min
+                # Eliminamos el min
                 for i in range(len(Runtime_of_Episodes)):
                     if Runtime_of_Episodes[i] == ' ':
                         indice = i
                 Runtime_of_Episodes = Runtime_of_Episodes[:indice]
-                #Obtengo el codigo del genero
+                # Obtengo el codigo del genero
                 for i in range(len(vec_gen)):
                     if Genre == vec_gen[i]:
                         Genre = i
                 serie = Serie(Poster_Link, Series_Title, Runtime_of_Series, Certificate, Runtime_of_Episodes, Genre, IMDB_Rating, Overwiew, No_of_Vote)
 
-                #Agrego los elementos
+                # Agrego los elementos
                 insercion_binaria_por_numero_de_votos(vec_regs, serie)
         c += 1
 
 
-    #Cerrar el archivo
+    # Cerrar el archivo
     m.close()
 
 
@@ -104,12 +105,12 @@ def main():
     vec_gen = []
     # Generamos el vector de registros
     vec_regs = []
-
-    # Mostramos el menu y solicitamos una opcion al usuario
-    mostrar_menu()
-    op = int(input('Ingres su opcion deseada: '))
+    op = -1
 
     while op != 0:
+        # Volvemos a mostrar el menu y solicitamos una opcion al usuario
+        mostrar_menu()
+        op = int(input('Ingres su opcion deseada: '))
         if op == 1:
             print('-' * 21, 'Procesar Archivo de Texto', '-' * 21)
             process_txt(vec_gen)
@@ -130,10 +131,6 @@ def main():
             pass
         elif op == 7:
             pass
-
-        # Volvemos a mostrar el menu y solicitamos una opcion al usuario
-        mostrar_menu()
-        op = int(input('Ingres su opcion deseada: '))
 
 
 if __name__ == '__main__':
