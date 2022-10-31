@@ -153,12 +153,16 @@ def mostrar_y_generar_vector_punto_3(vector_registros, vector_punto_3, a, b):
     contador_serie = 0
     acumulador_serie = 0
     for serie in vector_registros:
-        if serie.runtime_of_episodes >= a or serie.runtime_of_episodes <= b:
+        if a <= serie.runtime_of_episodes <= b:
             print(serie)
             contador_serie += 1
             acumulador_serie += serie.runtime_of_episodes
             vector_punto_3.append(serie)
-    promedio = acumulador_serie / contador_serie
+    if contador_serie != 0:
+        promedio = round((acumulador_serie / contador_serie), 2)
+    else:
+        promedio = 0
+        print('No existen series que coincidan en nuestros registros, con los limites de tiempo que usted ingreso')
     print(f'La duración promedio de las series que usted eligió es de: {promedio} minutos.')
     return vector_punto_3
 
@@ -172,7 +176,7 @@ def crear_archivo(archivo3, vector_punto_3):
              '|' + 'Runtime_of_Episodes' + '|' + 'Genre' + '|' + 'IMDB_Rating' + '|' + 'Overview' + \
              '|' + 'No_of_Votes'
 
-    m = open(archivo3, "wt")
+    m = open(archivo3, "wt", encoding='UTF-8')
 
     m.write("{}\n".format(header))
     for serie in vector_punto_3:
@@ -263,7 +267,6 @@ def search_tit(vec_registros):
 def main():
     print()
     print()
-    menu()
 
     archivo1 = 'generos.txt'
     archivo2 = 'series_aed.csv'
