@@ -307,7 +307,7 @@ def main():
                 vector_punto_3 = mostrar_y_generar_vector_punto_3(vector_registros, vector_punto_3, a, b)
 
                 decision = input('¿Desea generar un archivo con los registros mostrados en el punto 3?: S/N ')
-                if decision == 's' or 'S':
+                if decision == 's' or decision == 'S':
                     crear_archivo(archivo3, vector_punto_3)
                     print(f'Enhorabuena, ha creado su archivo {archivo3}.')
                 else:
