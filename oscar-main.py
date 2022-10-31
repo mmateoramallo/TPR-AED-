@@ -106,7 +106,7 @@ def cargar_vector_registros(archivo2, vector_registros, vector_generos):
         contador_verdadero = 0
         for linea in lista:
             serie = tokenizar(linea[:-1], vector_generos)
-            if serie and c < 5:
+            if serie:
                 insercion_binaria_por_numero_de_votos(vector_registros, serie)
                 contador_verdadero += 1
             else:
@@ -128,6 +128,49 @@ def mostrar_vector_registros(vector_registros):
 
 
 # PUNTO 3 ------------------------------------------------------------------------------------------------
+# 3) A partir del vector de series, mostrar aquellas series (a razón de una o dos líneas por cada una de ellas), que tengan una duración en minutos entre a y b siendo a y b valores que se deben ingresar por teclado. Al final del listado mostrar la duración promedio y ofrecer al usuario almacenar el listado en un nuevo archivo de texto con el formato del original, sin los campos omitidos.
+
+def show_in_range(a, b, vec_regs):
+    ac = 0
+    cont_ser = 0
+    vec_ser_fil = []
+    for i in vec_regs:
+        # Consultamos en que estados se encuentra su duracion
+        if a <= i.runtime_of_episodes <= b:
+            # Mostramos la serie
+            print(i)
+            ac += i.runtime_of_episodes
+            cont_ser += 1
+            # La agregamos al vector de series filtradas
+            vec_ser_fil.append(i)
+
+    # Calculamos el promedio
+    promedio = round((ac / cont_ser), 2)
+    print('*' * 21, 'El promedio de duracion es de: ', str(promedio), '*' * 21)
+    # Consultamos si desea almacenarlo en un archivo de texto
+    query = int(input('Desea almacenar las series en un archivo?: '))
+    print('0 -> No')
+    print('1 -> Si')
+
+    # Consulto si guardamos las series
+    if query == 1:
+        header = 'Poster_Link' + '|' + 'Series_Title' + '|' + 'Runtime_of_Series' + '|' + 'Certificate' + \
+                 '|' + 'Runtime_of_Episodes' + '|' + 'Genre' + '|' + 'IMDB_Rating' + '|' + 'Overview' + \
+                 '|' + 'No_of_Votes'
+        # Abrimos el archivo
+        m = open('series2.aed.csv', 'wt')
+        m.write(header)
+        # Recorrememos el vector de series filtradas, para agregarle cada serie al archivo
+        for j in vec_ser_fil:
+            line = to_string(j)
+            m.write(line)
+
+        # Cerramos el archivo
+        m.close()
+    else:
+        print('Usted se lo pierde...')
+
+
 def to_string(registro):
     cadena = ''
     cadena += registro.poster_link
@@ -263,7 +306,6 @@ def search_tit(vec_registros):
 def main():
     print()
     print()
-    menu()
 
     archivo1 = 'generos.txt'
     archivo2 = 'series_aed.csv'
@@ -302,14 +344,10 @@ def main():
 
                 a = validar_rango('Ingrese una duración mínima de su serie: ', 0, 10000)
                 b = validar_rango('Ingrese una duración máxima de su serie: ', 0, 10000)
+                print(a)
+                print(b)
 
-                vector_punto_3 = mostrar_y_generar_vector_punto_3(vector_registros, vector_punto_3, a, b)
-
-                decision = input('¿Desea generar un archivo con los registros mostrados en el punto 3?: S/N')
-                if decision == 's' or 'S':
-                    crear_archivo_con_omitidos(archivo3, vector_punto_3)
-                else:
-                    print('Ud. eligió no crear el archivo del punto 3. Siga usando el programa si desea.')
+                show_in_range(a, b, vector_registros)
             elif opc == 4:
                 if vector_registros:
                     print()
